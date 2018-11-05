@@ -1,22 +1,21 @@
 package com.capgemini.jdbc;
 
+import java.io.File;
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 import java.util.Scanner;
 
 public class DemoJDBC {
 public static void main(String[] args) {
 	
 	Scanner sc = new Scanner(System.in);
-	System.out.println("enter the jar class");
-	String classname = sc.next();
-	System.out.println("enter username");
-	String user = sc.next();
-	System.out.println("Enter password");
-	String pass = sc.next();
+	
+	
 	Connection con = null;
 	Statement stmt = null;
 	ResultSet rs = null;
@@ -24,13 +23,19 @@ public static void main(String[] args) {
 	{
 	//1.Loads the driver class
 		java.sql.Driver driver = (java.sql.Driver)Class.forName
-				(classname).newInstance();
+				("com.mysql.jdbc.Driver").newInstance();
 		DriverManager.registerDriver(driver);
 	
-	//2.Estb the db conn via driver
-	String dburl = "jdbc:mysql://localhost:3306/Avengers?";
-	con = DriverManager.getConnection(dburl,user,pass);
-	//con = DriverManager.getConnection(dburl);
+		//2.Estb the db conn via driver
+		File f = new File("D:/dbc.PROPERTIES");	
+	    FileReader fr = new FileReader(f);
+	    Properties p = new Properties();
+	    p.load(fr);
+	    System.out.println(p.getProperty("user"));
+	    System.out.println(p.getProperty("password"));
+		String url = "jdbc:mysql://localhost:3306/Avengers?";
+		con = DriverManager.getConnection(url,p);
+		
 	
 	//3.Issue the sql query via conn
 	String query = "select * from marvel_table";
